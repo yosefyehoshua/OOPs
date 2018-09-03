@@ -1,0 +1,85 @@
+yosef12345
+
+alon.cohen
+nofar.erez
+ravid.ginat
+
+=============================
+=      File description     =
+=============================
+DirectoryProcessor.java - a DirectoryProcessor class, this class only contains a main function that runs all
+the program and sorting the files according to filter and order objects, and printing them by order.
+ErrorTypeOne - an ErrorTypeOne that extends Exception dealing with bad line commend format from the
+commendfile.
+ErrorTypeTwo - an ErrorTypeTwo class that extends Exception for commendfile format errors.
+Section.java - class section initialize section: from FILTER to ORDER.
+Section.Parsser - a local class Parsser that parsing a text file, line by line.
+FilterFactory.java - a class factory that creates filter object according to the commendfile
+Filter.java - A Filter abstract class
+AllFilter.java - a filter class that let all the files pass.
+BetweenFilter.java - a filter class the filters file by a given range between two numbers.
+ContainsFilter.java - a filter class the filters file if given value is contained in the file name.
+ExecutableFilter.java - a filter class the filters file if given file is executable.
+FilterFile.java - see if a given name is equals to the name of a file.
+GreaterThenFilter.java - GreaterThanFilter class - filters according to which filter has greater size.
+HiddenFilter.java - HiddenFilter class - checks if a file is hidden or not.
+PrefixFilter.java - PrefixFilter class - checks if a file's prefix matches a certain given prefix.
+SuffixFilter.java - SuffixFilter class - checks if a file has a certain suffix.
+WritableFilter.java - WritableFilter - checks if a file is writable or not.
+OrderFactory.java - a class factory that creates Order object according to the coomendfile.
+Order.java - An Order abstract class.
+OrderSize.java - a class OrderSize extends Order Sort files by file size, going from smallest to largest.
+OrderType.java - a OrderType class extends order Sort files by file type, going from 'a' to 'z'.
+OrderAbs.java - a class OrderAbs extends Order Sort files by absolute name , going from 'a' to 'z'.
+=============================
+=          Design           =
+=============================
+About my design:
+in my implementation of my guideline was to make this code as modular as it can be. doing so is implemented
+my program like so:
+DirectoryProcessor - runs all the program calls all classes
+    Section - creates valid sections
+        FilterFactory - creates filter objects
+            filter - an abstract class
+                filter type...
+        OrderFactory - creates order objects
+            Order - an abstract class
+                Order type...
+as you can see this modular design helps protect the code from the future bug and changes. a user that will
+want to add a new filter/order can do it with minimum changes in the code, actually only at the factories.
+also i organized my code in packages to increase understandability.
+=============================
+=  Implementation details   =
+=============================
+Persser class:
+a local class situated in SECTION class, started as an independent class this local class is responsible
+of all the reading of the commendfile and creating Filter-Order objects accordingly, then creating new
+Sections objects and returns an array of those.
+
+Filter class:
+an abstract class that keeps the principals of modularity.
+there is an abstract function there isFilter()
+that each filter type implements it differently.
+
+Order class:
+an abstract class that keeps the principals of modularity.
+there is an abstract function there isReveresd()
+that checks for reveresed order instroctions
+
+DirectoryProcessor class:
+as it the main class its connect all classes together, deals with executions and basically make everything
+work.
+=============================
+=    Answers to questions   =
+=============================
+dealing with Exceptions:
+in this program you will find two Exceptions classes ErrorTypeOne and ErrorTypeTwo.
+ErrorTypeTwo is called mostly at THE MAIN class DirectoryProcessor, this class catches it from section class
+this is because of the type of this error it is more easy to detect and less deep.
+as for ErrorTypeOne, it is for deeper errors as the hierarchy goes from
+factory --> section --> DirectoryProcessor
+this hierarchy, helps buble the deep errors up and print them to the user.
+
+dealing with Sort-Data:
+for sorting the files i used ArrayList of files and sorted the Array using Comperator Object that class
+Order implements.

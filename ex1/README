@@ -1,0 +1,76 @@
+yosef12345
+
+Yosef Yehoshua
+302818513
+
+=============================
+=      File description     =
+=============================
+Board.java -  The Board class represents a board of the Nim game. The board can be of a variable size.
+In this implementation it only has 4 rows, 7 sticks in the first row, and 5,3 and 1 sticks in the following
+rows. A board object is disposable, meaning that the moves performed on the board are not reversible, and
+if a "clean" board is required, the user has to initialize a new board object.
+
+Competition.java - The Competition class represents a Nim competition between two players, consisting of a
+given number of rounds. It also keeps track of the number of victories of each player.
+
+Player.java - The Player class represents a player in the Nim game, producing Moves as a response to a
+Board state. Each player is initialized with a type, either human or one of several computer strategies,
+which defines the move he produces when given a board in some state.
+
+Move.java - The Move class represents a move in the Nim game by a player. A move consists of the row on which
+it is applied, the left bound (inclusive) of the sequence of sticks to mark, and the right bound
+(inclusive) of the same sequence.
+
+=============================
+=          Design           =
+=============================
+in this exercise I practice basic Java programming principles, including the use of Java primitive types,
+flow control, loops and the creation of basic classes. I also practice writing Java code using a text
+editor (inelliJ), and compiling and running Java programs using the command line. I implemented the classes
+by an API provided to me.
+
+=============================
+=  Implementation details   =
+=============================
+in ex1 we implemented a version of the nim game - a mathematical game of strategy for two players.
+
+Game rules
+The board of the game consists of 25 sticks, ordered in 5 rows of 9,7,5,3 and 1 sticks, respectively.
+Here is a sketch of the board: (the board is fixed)
+
+    I      {Row no.5}
+   III     {Row no.4}
+  IIIII    {Row no.3}
+ IIIIIII   {Row no.2}
+IIIIIIIII  {Row no.1}
+
+The two players take alternating turns, where in each turn a player must mark exactly one continuous sequence
+of sticks from one (and only one) of the rows; For example: the sequence starting at the 1st stick of the 2nd
+row and ending at the 7th (and last) stick of the row, or the sequence starting at the 2nd stick of the 1st
+row and ending at the 5th stick of the same row, or even the sequence starting and ending at the 1st stick of
+the 2nd row. The player that marks the last stick - meaning that after his move all sticks on the board are
+marked - is the loser; so the goal of each player is to mark sticks in a way that will force the other
+player to mark the last stick. After a move is made the respective sticks are marked; future moves cannot
+include marked sticks or skip over them.
+
+THIS Java program that runs a Nim game competition, composed of several rounds, between two players.
+Each player can be either human - who must then interact with the program, or controlled by a computer
+agent - in which case it can be one of several types of computer agents.
+
+
+
+=============================
+=    Answers to questions   =
+=============================
+I implemented the Smart player in this game under the understanding that while the sum of all sticks in the
+game is odd its better to take an even number of sticks on the contrary if the sum is even its better to take
+an ood number of sticks.
+
+base on this logic my Smart player is getting the sum of unmarked sticks in the game and if its an odd number
+it will seek for a pair of sticks and mark them. otherwise, if the sum number of all unmarked sticks on the
+board is even it will mark only one stick.
+
+this algorithm wins the Random player about 80% of the time, the reason is that the algorithm fails when we
+have a board with no pairs of sticks and the number of sticks in the board is ood, in this case the smart
+player will randomly pick a stick and mark it.

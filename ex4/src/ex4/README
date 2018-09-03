@@ -1,0 +1,202 @@
+yosef12345
+
+eldan.chodorov
+nofar.erez
+ravid.ginat
+
+=============================
+=      File description     =
+=============================
+AvlTree.java - this is a single class that composed from two inner classes:
+AvlNode - a class the represent a node object. this class handle every capitalistic an avl tree node can
+have; like height, depth, balance' children, parents and more.
+MyIter - a class that represent and iterator, this class allow us to, iterate on the tree, and have excess to
+the individual nodes in the tree.
+
+in this class, the AvlTree class we have our basic methods of ADD, CONTAINS and DELETE. their
+implementations assure a safe use, and keeping the Avl Tree property intake.
+
+=============================
+=          Design           =
+=============================
+About my design:
+using the minimal API principals i designed this code with minimum access to any related functions. i chose to
+desigen my code using inner classes knowing the local classes are unique to this particular AvlTree class.
+in addition, i preferred to divide long functions as much as i can with out adding to the runnig time as
+turnig the code to be cumbersome. as i mentioned above i implemented the minimal api principals, using
+a variety functions (i.e rotation functions, height and depth functions..). functions assured me  that the
+properties of the avl tree is maintained and every other elementary actions such as ADD or DELEtE will work
+efficiently.
+=============================
+=  Implementation details   =
+=============================
+there is a few unique implementation the i wrote in this code:
+starting from the ADD,Delete,CONTAINS function: i preferred to write it as short as possible thus they are
+comprised of smaller function. i.e there is a search function that returns a node if it is in the tree or
+null otherwise. this function helped me avoiding code duplications as the strolling on the tree is neccerry
+for this kind of actions.
+
+ADD and Delete, were quite tricky (i will talk about Delete later on) as adding or deleiting can destroy
+the avl tree balance. to solve this problem i use the rotation algoritms. these algorithms while hard to
+write were very useful. as we know there are four cases of rotations etch has its own treament. i wrote two
+functions that classify these cases, by calcuating the heights of each node.
+
+the Delete function has 3 cases to handle:
+1 - we are deleting a leaf:
+    we will just delete its parent pointer to it, no problem.
+2 - we are deleting a single son parent ( left or right )
+    we will swap the deleted node parent pointer to its son and carry on
+3 - we are deleting a node that has two sons:
+    we will find the successor of the deleted node and transfer all its data to the deleted node, after we
+    will delete the successor.
+    doing this will cause violations in the tree so we will need th use rotations to keep the avl tree balance
+
+here is more information about rotations:
+
+There are four types of rotation to consider; left, right, double left and double right (terminology does
+vary, but I’ll use these terms only to avoid confusion).
+
+ left rotation
+ If you identify an unbalanced node whose subtree is right heavy (i.e. the balance factor is 2) and the right
+ subtree is not left heavy (i.e. the root of the unbalanced subtree’s right child has a balance factor of 0
+ or 1), this is the type of rotation you need. This is how the tree looks under these circumstances:
+
+  A
+   \
+    B
+     \
+      C
+ The steps to follow are:
+
+ B becomes the root
+ A takes ownership of B’s left child as its right child (in this case, this is NULL)
+ B takes ownership of A as its left child
+ This leaves the tree like this:
+
+    B
+   / \
+  A   C
+ right rotation
+ This is the mirror image of the left rotation, and is done when the unbalanced node you identify has a left
+ heavy subtree, indicated by a balance factor of -2, and the left subtree is not right heavy (i.e. the root
+ of the unbalanced subtree’s left child has a balance factor of 0 or -1).
+
+      C
+     /
+    B
+   /
+  A
+ The steps:
+
+ B becomes the new root
+ C takes ownership of B’s right child, as its left child.
+ B takes ownership of C, as its right child.
+ This leaves the tree looking like this:
+
+    B
+   / \
+  A   C
+ double left rotation
+ On a right-heavy unbalanced subtree with a left-heavy right child, the tree looks like this:
+
+  A
+   \
+    C
+   /
+  B
+ After a single left rotation, we have:
+
+    C
+   /
+  A
+   \
+    B
+ This doesn’t actually appear to have improved matters – the tree is the same shape as (well, the mirror
+  image of) the unbalanced subtree we started with. The fix is to do a right rotation on the right subtree
+   (that is, what was a right subtree to start with). Looking at just the right subtree:
+
+    C
+   /
+  B
+ After right rotation of this subtree:
+
+  B
+   \
+    C
+ So now the whole tree looks like:
+
+  A
+   \
+    B
+     \
+      C
+ This is recogniseable as the left rotation case; a left rotation will leave it balanced.
+
+ double right rotation
+ This is the mirror image of the double left case. Here, we have a left-heavy subtree whose left child has
+  a right-heavy subtree:
+
+    C
+   /
+  A
+   \
+    B
+ The balance factor of the root node is -2. Just like the single left rotation in the previous case, a single
+  right rotation gives us the mirror image, still just as unbalanced and with no progress made. The fix is to
+   do a left rotation on the left subtree first, then a right rotation on the result.
+
+ The left subtree is:
+
+  A
+   \
+    B
+ After the rotation, this looks like:
+
+    B
+   /
+  A
+ In the context of the whole unbalanced subtree, after the left rotation on the left subtree, this looks like:
+
+      C
+     /
+    B
+   /
+  A
+ Which we know we can fix with a right rotation based on one of the earlier examples:
+
+    B
+   / \
+  A   C
+
+
+
+=============================
+=    Answers to questions   =
+=============================
+5.1 Analyzing the AVL tree
+In Figure 1 you can see an AVL tree of height 3. This tree may seem unbalanced, but is in fact a valid AVL
+tree resulted from a specific insertion order. Notice that this example shows a tree of height 3 with
+minimal number of nodes (if you delete any node, the height of the tree will become 2).
+
+1. Find a series of 12 numbers, such that when they are inserted into an empty AVL tree one-by-one,
+the result will be a tree of height 4 (insertions only, no deletions).
+
+answer: {10,5,15,3,7,13,20,1,12,25,19,30}
+
+5.2.1 the asymptotic running time while adding a node is O(log(n)), having n the number of nodes to add
+      we will get an O(n*log(n)) running time complexity.
+
+5.2.2 BONUS: will still be O(n*log(n)) running time complexity.
+
+5.3.1 the asymptotic running time while iterting to find the next node is O(log(n)), having n
+number of nodes to add at O(1) we will get an O(n*log(n)) running time complexity.
+
+5.3.2 having a sorted array the best running time complexity we can get is O(n). while we have the root in
+the middle of the array and we'll add the other nodes and their children using recursion, in each intration
+ we cut the array to two.
+
+5.4.1 the running time complexity is O(1).
+
+5.4.2 yes, its the fastest i know :)
+
+

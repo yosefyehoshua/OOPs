@@ -1,0 +1,187 @@
+yosef12345
+
+yoav.galzur
+nofar.erez
+adi.sidis
+
+=============================
+=      File description     =
+=============================
+SimpleHashSet.java - an abstract class implementing SimpleSet.java an interface consisting of the add(),
+delete(), contains(), and size() methods.
+main methods in the class:
+add() - abstract: Add a specified element to the set if it's not already in it.
+delete() - abstract: Remove the input element from the set.
+contains() - abstract: Look for a specified value in the set.
+size() - abstract: returns The number of elements currently in the set
+
+OpenHashSet.java - a class hash-set based on chaining. Extends SimpleHashSet.
+main methods in the class:
+add() - Add a specified element to the set if it's not already in it.
+delete() - Remove the input element from the set.
+contains() - Look for a specified value in the set.
+size() - returns The number of elements currently in the set
+rehash() - rehasing the table in case the loadfactor is bigger/smaller the the upper/lower bound.
+
+ClosedHashSet.java - a class hash-set based on closed-hashing with quadratic probing. Extends SimpleHashSet.
+main methods in the class:
+add() - Add a specified element to the set if it's not already in it.
+delete() - Remove the input element from the set.
+contains() - Look for a specified value in the set.
+size() - returns The number of elements currently in the set
+rehash() - rehasing the table in case the loadfactor is bigger/smaller the the upper/lower bound.
+probing() - probing function that returns a boolean related to the case/action you want: add, delete,
+contains, rehash...it also delete or add..
+
+LinkedListWrapper.java - a wrapper-class that has-a LinkedList<String> and delegates methods to it.
+main methods in the class:
+add() - Add a specified element to the set if it's not already in it.
+delete() - Remove the input element from the set.
+contains() - Look for a specified value in the set.
+size() - returns The number of elements currently in the set
+pop() - poping the first value.
+
+CollectionFacadeSet.java - Wraps an underlying Collection and serves to both simplify its API and give it a
+common type with the implemented SimpleHashSets.
+main methods in the class:
+add() - Add a specified element to the set if it's not already in it.
+delete() - Remove the input element from the set.
+contains() - Look for a specified value in the set.
+size() - returns The number of elements currently in the set
+
+SimpleSetPerformanceAnalyzer.java -
+this class has a main method that measures the run-times
+Measure the time required to perform the following:
+1. Adding all the words in data1.txt, one by one, to each of the data structures
+2. The same for data2.txt. Again – in milliseconds.
+3. For each data structure, perform contains(“hi”) when it’s initialized with data1.txt.
+4. For each data structure, perform contains(“-13170890158”) when it’s initialized with data1.txt.
+5. For each data structure, perform contains(“23”) when it’s initialized with data2.txt.
+6. For each data structure, perform contains(“hi”) when it’s initialized with data2.txt. “hi” does not
+appear in data2.txt.
+main methods in the class:
+addToDataStructures() - calaculate the adding time of data1 & data2 for each data structure and printing the
+results.
+ContainsCost() - calculating the cost of one contains action.
+ContainsRunnigTime() - calculating the running time of contains while cheking for a specific string in
+dataStructuresArrayAsStrings and prints the results.
+
+RESULTS.txt - my runtime results of each data structure: "linkedList", "treeSet", "hashSet", "openHashSet",
+"closedHashSet"
+
+=============================
+=          Design           =
+=============================
+About my design:
+using the minimal API principals i designd this code with minimum access to an related functions, i chose to
+deal with the 'illegal access' of arrays of LinkedList in java with the second solution, i created a
+warpper class of linkedlist<string> the encompass all the needed operations: add, delete, size, contains...
+those were functions of java linkedlist objected, thus by creating my own class , a wrapper class, that
+initializing and put linkedlists in string arrays.
+
+in addition, i created an abstract class of SimpleHashSet, in this class you can find basic operations like:
+updating the size of the set or load factor, constants and ie. I decided to turn the basic String operations
+to an abstract function knowing that SimpleHashSet sub- classes: OpenHashSet and ClosedHashSet, will each
+implement this operations differently.
+=============================
+=  Implementation details   =
+=============================
+OpenHashSet’s table Implementation:
+as i mention above i decided to 'attack' the openhashset problem using the second solution in ex3.pdf, i
+created a wrapper class that class of linkedlist<string> the encompass all the needed operations: add,
+delete, size, contains. those were functions of java linkedlist objected, thus by creating my own class ,
+a wrapper class, that initializing and put linkedlists in string arrays. using this object 'wrapperClass',
+i initialized a wrapperClass array and fill it with this object. now i have a table that in each cell hides
+a wrapperClass object that acts like a linkedlist, from that moment on the writing was quite easy, when i
+needed to rehash i just created a new objedct of wrapper and filled it with values of the old one :)
+
+ClosedHashSet deletion mechanism Ibamplementation:
+i started to write the code for ClosedHashSet and i notice a repetition, all the basic operations: add, remove
+contains, are using the same conditions and principals:
+1. a for loop that get all possible clamps (indexes) for the given string
+2. 3 comparisons:
+        if the the right cell we've got (with the help of the clamper) is empty.
+        if the cell has a sign that a value was there and been deleted.
+        if the cell has a value in it and its different/same as the given value.
+so, to avoid this repetition, i wrote a function the has all this conditions and by dividing it to cases: add,
+delete, contains. i succeeded to avoid repetition.
+bottom line, in this function there is a case for deletion: it runs on all possible clamps with value or
+deleted values till it hits null, and if it finds a value that is the same it will replace it with a string
+reprehension the deletion has accord.
+=============================
+=    Answers to questions   =
+=============================
+1. Account, in separate, for OpenHashSet’s and ClosedHashSet’s bad results for data1.txt.
+    OpenHashSet:
+    we see bad results for OpenHashSet because of the separate chaining disadvantage, when given a 'bad
+    file' that values of this file are getting inserts at the same buckets each time, this creates long
+    chains - linkedlists, and doesn't distribute the data evenly.
+    this is the case will the file data1.
+
+    ClosedHashSet:
+    we see bad results for ClosedHashSet because of a weakness of openaddressing - the values gets the same
+    keys so we need to prob again and again till we get the an empty slot.
+
+2.  Summarize the strengths and weaknesses of each of the data structures as reflected by
+    the results. Which would you use for which purposes?
+
+    OpenHashSet: because of its characters when clustered the OpenHashSet struggle to produce a good running
+    time, we can see it where adding data from data1.txt, the running time is very slow. but when the data is
+    uniformly distribute the running time is very fast (data2 results).
+
+    ClosedHashSet: same goes for here, clustering the data causes a slow running time, while a uniform
+    distribution of indices will give fine results. :)
+
+    HashSet: by far got the best results, i can't see any weaknesses of this HashSet based on my results
+
+    TreeSet: adding to the TreeSet is very fast almost as the HashSet, but the TreeSet downside is when you
+     try to search for a value, this is when the TreeSets running time turns very slow.
+
+    LinkedList: got the worest results, adding all the elements took o(n) steps, and also every search.
+
+    from all the data structures i would defiantly choose the HashSet it outrun all the other dast and got the
+    best results.
+
+3.  How did your two implementations compare between themselves?
+    let look at the results:
+    OpenHashSet_AddData1 = 192580     OpenHashSet_AddData2 = 23     OpenHashSet_Contains_hi1 = 26771
+    ClosedHashSet_AddData1 = 204025   ClosedHashSet_AddData2 = 27   ClosedHashSet_Contains_hi1 = 2142
+
+    OpenHashSet_Contains_negative = 1034483      OpenHashSet_Contains_23 = 828
+    ClosedHashSet_Contains_negative = 4663519    ClosedHashSet_Contains_23 = 265
+
+    OpenHashSet_Contains_hi2 = 880
+    ClosedHashSet_Contains_hi2 = 1090
+
+    it is hard to tell but it seems that the CloseHashSet dealt more efficiently with the contains actions
+    in data2 and data2. i believe OpenHashSet is a bit slower, because of the weakness in long linked lists.
+
+4.  How did your implementations compare to Java’s built in HashSet?
+    while compering my implementations of OpenHashSet and ClosedHashSet to javas HashSet i see similarity
+    when dealing with data similar to data2. my implementations, differ when you add/search with data1 i
+    believe my algorithm struggle to handle clusters in the hash sets, and that javas HashSet algorithm know
+    how to handle with this kind of data.
+
+5.  What results surprised you and which did you expect?
+    i was surprised that the HashSet of java out run my HashSets at data1 i expected to get similar results.
+    i also expected to get the worst results from the likedlist due to its search running time of O(k).
+
+6.  Did you find java’s HashSet performance on data1.txt surprising? Can you explain it? Can
+    google? (no penalty if you leave this empty)
+    This class offers constant time performance for the basic operations (add, remove, contains and size),
+    assuming the hash function disperses the elements properly among the buckets. Iterating over this set
+    requires time proportional to the sum of the HashSet instance's size (the number of elements) plus
+    the "capacity" of the backing HashMap instance (the number of buckets). Thus, it's very important
+    not to set the initial capacity too high (or the load factor too low) if iteration performance is
+    important.
+    reading this from java docs i believe java’s HashSet uses a fast iterator the can deal nicely with un
+    even disperses withing the buckets.
+
+7.  if you tried clamping expressions to valid indices in more than one way, what were they
+    and how significant was the speed-up?
+    if i could i would check for clusters. if accruing i will change the probing formula from linear to
+    quadratic to double probing according to the load factor and the data, the keep the hashset in balance.
+
+BONUS:
+    we see that when we don't execute a warm up the running time for OpenHashSet increases by 75%.
+    i ran multiple tests i got between ~60% to  ~85% increase.

@@ -1,0 +1,41 @@
+yosef12345
+
+or.malka
+
+=============================
+=      File description     =
+=============================
+SpaceShip.java - An abstract class which is that symbolise a generic space ship. 
+Act.java - a class the act as a “protocol” between class SpaceShip.java and typeShip classes. 
+SpecialSpaceShip.java - A sub-class of SpaceShip java represents the special spaceship.
+DrunkShip.java - A sub-class of SpaceShip represents a ship with a drunken driver.
+AggressiveSpaceShip.java - A sub-class of SpaceShip represents an aggressive spaceship.
+RunnerSpaceShip.java - A sub-class of SpaceShip represents a runner space ship.
+BasherSpaceShip.java - A sub-class of SpaceShip represents a basher spaceship.
+HumanSpaceShip.java - A sub-class of SpaceShip represents a human space ship operated by a the user.
+SpaceShipFactory.java - A class that create all the spaceship objects according to the command line arguments.
+scary.gif - a scary face for the special ship :)
+invisible.gif - a tiny white dot for the special ship :)
+
+=============================
+=          Design           =
+=============================
+About my design:
+first, i define the SpaceShip.java as abstract class & abstract method in this class. then i created a class Art.java based on the idea that the object Act will hold all data of each ship with it particular behaviour (aggressive, runner, special…). each ship type will return its set of data in Act object and the SpaceShip class will excute the operation according to the data in Act object. 
+in addision i overwrite ‘getImage’ method at humanShip and SpecialShip so that the image of their ship will differ from the ordinary spaceship image      
+=============================
+=  Implementation details   =
+=============================
+i wrote an abstract method name ‘actLike’ that return Act object that from it i will extract the data needed to present a typical behaviour of a typeShip. this method simplify my code and make it flexible for adding other types of ships, by creating kind of ‘protocol’ that connect typeShip classes and SpaceShip class.      
+
+=============================
+=    Answers to questions   =
+=============================
+Advantages and disadvantages of my design:
+first my design allow a different programer to add ships with basically zero effort. because i implemented a kind of protocol between the ships every new feature of a particular ship cannot be added unless it is common behaviour of all the ships so adding a feature that not in the     
+
+The drunkard spaceship strategy:
+The drunkard space ship is random. setting a random boolean for acceleration and shield on and random int for turning. this sets make the drunken ship to move and act randomly without any “smart” strategy.  
+
+The special spaceship strategy:
+The special ship will stay almost invisibly and will shot the closest ship at a certain distance at a certain angle, while approaching closer the ship will activate the child and will refill itself with a scary face, thus surprising the other ships.  

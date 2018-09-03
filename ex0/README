@@ -1,0 +1,38 @@
+yosef12345
+
+Yosef Yehoshua
+302818513
+
+=============================
+=      File description     =
+=============================
+Book.java -  This class represents a book, which has a title, author, year of publication and different
+literary aspects.
+
+Patron.java - This class represents a library patron that has a name and assigns values to different
+literary aspects of books.
+
+Library.java - This class represents a library, which hold a collection of books. Patrons can register at the
+library to be able to check out books, if a copy of the requested book is available.
+
+=============================
+=          Design           =
+=============================
+in this exercise I practice basic Java programming principles, including the use of Java primitive types,
+flow control, loops and the creation of basic classes. I also practice writing Java code using a text
+editor (inelliJ), and compiling and running Java programs using the command line. I implemented the classes
+ by an API provided to me.
+
+=============================
+=  Implementation details   =
+=============================
+in ex0 we implemented a library system consists of libraries, patrons and books. Each of these components
+is represented by a corresponding class. Libraries hold some number of books - limited by their individual
+book capacity - and allow each patron to borrow books up to the allowed limit. Once a book is borrowed by
+some patron, it cannot be borrowed by another patron until it is returned by its current holder. Besides
+borrowing limit and book availability, borrowing is also affected by the preferences of the patrons: each
+book has three characteristics that compose its literary value - its comic value, its dramatic value and
+its educational value. Different patrons ascribe different levels of importance to these three 
+characteristics; this is reflected by the individual set of weights each patron assigns them. The weighted
+sum of the above characteristic reflects the total value a patron assigns to some book, and a patron will
+only borrow a book that she will enjoy - i.e. a book to which she assigns a value beyond some threshold.

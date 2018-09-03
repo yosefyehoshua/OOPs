@@ -1,0 +1,175 @@
+yoav.galtzur
+yosef12345
+
+
+=============================
+=      File description     =
+=============================
+
+SjavaInterperter.java - An interface implemented by all Interpreters of S-Java in the program.
+Containing important patterns, classifying and handling methods (some of which are already implemented)
+SjavaException.java - Super-class uniting all exceptions in the program except IOExceptions
+SecondaryInterpreter.java - A verifier for S-Java code, after classifying the line, provides tools to
+check its logical structure according to the laws of the programming language
+
+The 'main' module:
+Sjavac.java - Contains the Sjavac class which has just one method, 'main', which is the doorway to the
+program.
+
+The 'generalscope' module:
+Containing classes that handle the analysis fo the general scope code alongside basic syntax verification
+GeneralScope.java - containing a class representing the general (most outer) scope of the given code.
+GeneralScopeException.java - Represents exception raised while detecting errors in the code's general scope
+GeneralScopeInterpreter.java - The secondary Interpreter that analyzes only lines that are within the
+general scope, (including method declaration and excluding brackets closing a method's scope).
+The Interpreter analyzes the line according to S-java's logic and throws exceptions in case of violation.
+InitialInterpreter.java - An initial verifier for S-Java, after classifying the line, provides tools to
+check its syntactical structure according to the laws of the programming language. The interpreter also
+constructs method and global variable, preparing the ground for the second, more logic oriented, verifier.
+
+The 'method' module:
+MethodException.java - Represents exception raised while detecting errors in a method
+ConditionException.java - Represents exception raised while an error in if/while conditions is detected.
+Method.java - Class representing method in an S-Java code. Containing the method's attributes
+(such as parameters, variables etc.), a designated method interpreter and a few helper methods.
+MethodInterpreter.java - The secondary Interpreter that analyzes only lines that are within a method,
+(excluding method declaration and including brackets closing a method's scope). The Interpreter analyzes the
+line according to S-java's logic and throws exceptions in case of violation
+
+The 'variables' module:
+BooleanVariable.java - A class representing a variable of type boolean in S-Java
+CharVariable.java - A class representing a variable of type char in S-Java
+IntVariable.java - A class representing a variable of type int in S-Java
+DoubleVariable.java - A class representing a variable of type double in S-Java
+StringVariable.java - A class representing a variable of type String in S-Java
+FactoryVariable.java - A factory for creating variables in S-java
+Variable.java - A class representing a variable in an S-Java program (super-class to all
+type-specific variables)
+VariableException.java - Exception class uniting all variable-related exceptions such as: non-existing type,
+invalid value etc.
+
+
+=============================
+=          Design           =
+=============================
+
+Important design choices:
+1) Modules and packages:
+We've divided the program into four main modules that except for the 'main' module, each is a major aspect
+of an S-java program. Apart from readability and an orderly program, this enables us to easily modify
+different aspects of an S-java program alongside keeping a lot of data hidden (through the 'package'
+modifier) there by implementing the open-close, understandability and modularity principle.
+
+2) Interpreters:
+The interpreters we use throughout the verification of the code are not surprisingly the heart of the
+program. Our main idea is was to have two different interpreters:
+InitialInterpreter - which goes over the syntax and preparing the general scope data members and methods
+SecondaryInterpreter - goes over the code in look for logic violations (invalid values, if/while in the
+general scope etc.), where the general scope and each method has a different one, because different rules
+apply for a general scope and a method.
+The SJavaInterpreter is the interface uniting these two classes enabling them to share useful patterns and
+methods and 'making sure' all interpreter meet a general standard of functionality.
+The SecondaryInterpreter abstract class is more of a design feature, making sure that the link between the
+MethodInterpreter and the GeneralScopeInterpreter is clear.
+
+3) Variables:
+The decision to make each variable a different class was due to the fact that each type has a unique
+pattern that values must fit in order to be assigned in that variable.
+Creating a factory for variables:
+That was an easy one, to maintain the single-choice principle and since no multiple instances of the
+factory are needed we've used both Singleton and Factory design patterns.
+
+4) Exceptions:
+The decision to make multiple exception classes was made to increase readability and enable easy
+extension of the code, if one day someone would like to handle some of the exceptions
+
+
+=============================
+=  Implementation details   =
+=============================
+
+1) Keeping the local variables in a stack:
+To easily differentiate between local variables declared in different scopes of the method, we've used the
+'stack' data structure which provides an intuitive implementation of the different scopes. The each element
+in the stack of array lists represents a scope in the method, the upper the level of the stack, the deeper
+scope we are in. In the program whenever a variable is declared it's appended to the top array list in the
+stack (AKA the current scope), and whenever a scope is closed the array list of that scopes is deleted
+(using pop()), since its declared variables are unusable anyway.
+The only downside of using stack (or at least java's version) is that the iteration over the stack goes
+from the bottom-up. Since when looking for a variable (when assigning some value to it, for example) we
+would like to get the most inner-scoped variable with that name, it makes more sense to iterate the stack
+top-down. Our somewhat inefficient implementation (asymptotically it's still O(n)), is to reverse the
+stack and then iterate over it, since this is not the heart of the exercise and due to lack of time we had
+to settle for that.
+
+2) Classifying lines by line patterns:
+The most important method for our interpreters is the 'classifyLine' method which is implemented as a
+default method in the SJavaInterpreter interface. We've considered some tactics of classifying code lines,
+but we have decided to classify them according to line patterns. That means that we had to categorize the
+valid lines in S-java and understand the unique pattern of each category, and then classify the lines
+according to the different patterns.
+Up-sides:
+making the code much shorter - instead of analyzing the line word by word which is usually longer
+regex experience - since neither of us have used regular expressions before, this was a challenging but a
+very cool task.
+easier advanced analyzing - After a line is classified, if the line patterns are reliable, you can assume
+that this line's syntax is flawless, which makes further analyzing, easier, shorter and more focused.
+Down-sides:
+complicated regex - obviously, writing regex for lines makes it long and not so readable, we've tried to
+over come that using simpler regex saved an constants and keeping most of our regexs in one place
+(SJaveInterpreter).
+rigid patterns - the line patterns are somewhat hard to change, so if some day S-java we'll start support
+method calls without brackets for instance or any other change of the current syntax new patterns will
+have to be written (even though that night happen even if using a different classification tactic)
+
+
+=============================
+=    Answers to questions   =
+=============================
+
+1) How would we implement the type 'float'?
+Implementing float will take - defining a new class, 'FloatVariable', update the available types in the
+FactoryVariables and build a pattern for float values to match.
+As you can see, these are all operations that extend the program without changing any code, all sone in
+the 'variables' module and do not affect other parts of the program
+
+2) How to implement arrays?
+The way our program is designed, in order to add arrays we would probably create a new module
+
+In order to add arrays, a generic class (accepting one of the defined types in the factory) would need to
+be built. Backed up by a java array list of the parallel type, the basic array functions would be
+implemented (add, delete, contains etc.).
+Two new line pattern would have to be added to 'SJavaInterpreter', one matching a declaration on an array
+and one to handle the basic array operations (line of type: array.operation()).
+The method 'VariableAssignmentHandler' will have to be extended to handle a case of array assignment,
+and a new method to handle array operations will have to be implemented.
+
+3) How to handle Switch statements?
+Two new line patterns in the SJavaInterpreter: one for the 'Switch' saved word and one for the 'case',
+this would verify the switch syntax.
+To verify the logic in the statement, aa new helper method will probably be written in the
+MethodInterpreter class, which will use the variable's attributes and value pattern to determine if the
+switch statement makes sense.
+
+4) Regular Expressions:
+As written above, we had an extensive use in regular expression. We'll describe two of them:
+
+VALID_METHOD_NAME = "[a-zA-Z]\w*"  - We've used this regex and much more like it as the building blocks
+of more complicated regular expressions. This regex for instance matches a valid S-java method name,
+starting with an english character (capital or not), and followed by 0 or more 'word characters' (english
+character, digit or an underscore).
+
+If statement pattern: ""^\s*if\s*(?<condition>\(.+\))\s*\{\s*$"
+This is a more complicated regular expression, matches the pattern of an if statement. This is a full line
+pattern, beginning with '^' and ends with '$', the 'condition' named-group is saving whatever there is
+inside the brackets for future analyze. So this is actually a very initial pattern, not very detailed,
+just there to classify line according to syntax characteristics
+Since this is unreadable, to say the least, we've used constants, smaller regex as seen above, and named
+groups to increase readability. This is how the regex looks in our code:
+Pattern ifStatementPattern = Pattern.compile("^\\s*"+IF_SAVED_WORD+"\\s*(?<condition>" +
+            BRACKETS_CONTAINING_SOMETHING +")\\s*"+BRACKETS_END_OF_LINE);
+The great thing about this, that even if you don't really understand regular expressions you can still see
+what a matcher with this pattern will be looking for. Moreover, because a lot of patterns are sharing the
+same building blocks (for instances, 'BRACKETS_END_OF_LINE' is very popular), if there's a mistake in one
+of the building blocks you don't have to change it one by one, a change in the building block will take
+care of all patterns using it.
